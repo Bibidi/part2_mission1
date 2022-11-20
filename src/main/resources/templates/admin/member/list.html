@@ -77,6 +77,9 @@
                     <th>
                         관리자여부
                     </th>
+                    <th>
+                        마지막 로그인 일자
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -100,6 +103,9 @@
                         <p th:if="${x.adminYn}">Y</p>
                         <p th:if="${x.adminYn eq false}">N</p>
                     </td>
+                    <th>
+                        <p th:text="${#temporals.format(x.getLastLoginDt(), 'yyyy-MM-dd HH:mm')}"></p>
+                    </th>
                 </tr>
             </tbody>
         </table>

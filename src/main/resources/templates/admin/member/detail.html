@@ -11,6 +11,13 @@
         .detail table th, .detail table td {
             border:solid 1px #000;
         }
+        .list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .list table th, .list table td {
+            border:solid 1px #000;
+        }
 
     </style>
 </head>
@@ -101,9 +108,34 @@
 
         </div>
 
-
     </div>
 
+    <div class="list">
+        <table>
+            <thead>
+            <tr>
+                <th>NO</th>
+                <th>
+                    로그인 일자
+                </th>
+                <th>
+                    접속 IP
+                </th>
+                <th>
+                    접속 UserAgent
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="x : ${userLoginHistories}">
+                <td th:text="${userLoginHistories.size() - xStat.index}"></td>
+                <td th:text="${#temporals.format(x.getLoginDt(), 'yyyy-MM-dd HH:mm')}">홍길동</td>
+                <td th:text="${x.getClientIP()}"></td>
+                <td th:text="${x.getUserAgent()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
 </body>
 </html>

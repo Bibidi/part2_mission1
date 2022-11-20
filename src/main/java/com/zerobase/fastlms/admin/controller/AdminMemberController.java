@@ -2,8 +2,10 @@ package com.zerobase.fastlms.admin.controller;
 
 
 import com.zerobase.fastlms.admin.dto.MemberDto;
+import com.zerobase.fastlms.admin.dto.UserLoginHistoryDto;
 import com.zerobase.fastlms.admin.model.MemberParam;
 import com.zerobase.fastlms.admin.model.MemberInput;
+import com.zerobase.fastlms.admin.service.UserLoginHistoryService;
 import com.zerobase.fastlms.course.controller.BaseController;
 import com.zerobase.fastlms.member.service.MemberService;
 import com.zerobase.fastlms.util.PageUtil;
@@ -20,12 +22,20 @@ import java.util.List;
 public class AdminMemberController extends BaseController {
     
     private final MemberService memberService;
+    private final UserLoginHistoryService userLoginHistoryService;
     
     @GetMapping("/admin/member/list.do")
     public String list(Model model, MemberParam parameter) {
         
         parameter.init();
         List<MemberDto> members = memberService.list(parameter);
+
+        members.forEach(member -> {
+            member.setLastLoginDt(
+                    userLoginHistoryService.findLastLoginDate(new MemberDto().builder()
+                    .userId(member.getUserId())
+                    .build()));
+        });
         
         long totalCount = 0;
         if (members != null && members.size() > 0) {
@@ -47,7 +57,12 @@ public class AdminMemberController extends BaseController {
         parameter.init();
         
         MemberDto member = memberService.detail(parameter.getUserId());
+        List<UserLoginHistoryDto> userLoginHistories = userLoginHistoryService.findAllByUserId(parameter.getUserId());
+
+        userLoginHistories.forEach(x -> System.out.println(x));
+
         model.addAttribute("member", member);
+        model.addAttribute("userLoginHistories", userLoginHistories);
        
         return "admin/member/detail";
     }

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zerobase.fastlms.admin.mapper.UserLoginHistoryMapper">
+    <select id="selectLastLogin" resultType="java.time.LocalDateTime">
+        select MAX(login_dt)
+        from user_login_history
+        where user_id = #{userId}
+    </select>
+
+    <select id="selectAllByUserId" resultType="com.zerobase.fastlms.admin.entity.UserLoginHistory">
+        select *
+        from user_login_history
+        where user_id = #{userId}
+        order by login_dt desc
+    </select>
+</mapper>
