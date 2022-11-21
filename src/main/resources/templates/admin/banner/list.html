@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>배너 관리</title>
+    <style>
+        .list table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .list table th, .list table td {
+            border: solid 1px #000;
+        }
+
+        p.nothing {
+            text-align: center;
+            padding: 100px;
+        }
+
+        .list .buttons {
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .list .buttons a, .list .buttons button {
+            border-width: 0;
+            background-color: transparent;
+            text-decoration: underline;
+            font-size: 14px;
+            line-height: 20px;
+            height: 20px;
+            color: #000;
+            cursor: pointer;
+        }
+
+        .list .buttons .total-count {
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+
+        .pager {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .pager a.on {
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+</head>
+<body>
+<div th:replace="/fragments/layout.html :: fragment-admin-body-menu"></div>
+<h1>배너 관리</h1>
+
+
+<div class="list">
+
+    <div>
+        <a href="/admin/banner/add.do">배너 등록</a>
+        <button type="button" id="deleteButton">선택 삭제</button>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>
+                <input type="checkbox" name="allCheck" on>
+            </th>
+            <th> NO</th>
+            <th>
+                배너명
+            </th>
+            <th>
+                이미지
+            </th>
+            <th>
+                등록일
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="x : ${list}">
+            <td>
+                <input type="checkbox" name="rowCheck" th:value="${x.getId()}">
+            </td>
+            <td>
+                <p th:text="${xStat.count}"></p>
+            </td>
+            <td>
+                <a th:text="${x.getBannerName()}"
+                   th:href="${'update.do?id=' + x.getId()}">
+            </td>
+            <td>
+                <img th:src="${x.getImagePath()}" th:alt="${x.getAlterText()}" th:target="${x.getTarget()}" />
+            </td>
+            <td>
+                <p th:text="${#temporals.format(x.getRegDt(), 'yyyy-MM-dd HH:mm')}"></p>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="pager" th:utext="${pager}">
+    </div>
+
+</div>
+
+<script>
+    const allCheck = document.querySelector("input[name='allCheck']");
+    allCheck.addEventListener('click', function() {
+        const checks = document.querySelectorAll("input[name='rowCheck']");
+        for (let i = 0; i < checks.length; i++) {
+            checks[i].checked = this.checked;
+        }
+    });
+
+    const deleteButton = document.querySelector("#deleteButton");
+    console.log(deleteButton);
+    deleteButton.addEventListener('click', function () {
+        const checks = document.querySelectorAll("input[name='rowCheck']");
+        console.log(checks);
+        for (let i = 0; i < checks.length; i++) {
+            const checked = checks[i].checked;
+            if (checked === true) {
+                $.post("/admin/banner/delete.do?id=" + checks[i].value);
+            }
+        }
+        window.location.replace("/admin/banner/list.do");
+    });
+
+</script>
+
+</body>
+</html>
