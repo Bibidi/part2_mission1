@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface BannerService {
     List<BannerDto> list(CommonParam commonParam);
+    List<BannerDto> list();
     long listTotalCount();
     BannerDto findByUserId(long id);
     boolean add(BannerDto bannerDto);

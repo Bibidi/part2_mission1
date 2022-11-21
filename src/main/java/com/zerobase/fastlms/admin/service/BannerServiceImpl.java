@@ -41,6 +41,28 @@ public class BannerServiceImpl implements BannerService {
     }
 
     @Override
+    public List<BannerDto> list() {
+        List<Banner> banners = bannerRepository.findAll();
+        List<BannerDto> list = new ArrayList<>();
+
+        banners.forEach(banner -> {
+            list.add(new BannerDto().builder()
+                    .id(banner.getId())
+                    .bannerName(banner.getBannerName())
+                    .imagePath(banner.getImagePath())
+                    .alterText(banner.getAlterText())
+                    .linkAddress(banner.getLinkAddress())
+                    .target(banner.getTarget())
+                    .sortValue(banner.getSortValue())
+                    .usingYn(banner.isUsingYn())
+                    .regDt(banner.getRegDt())
+                    .build());
+        });
+
+        return list;
+    }
+
+    @Override
     public long listTotalCount() {
         return bannerRepository.count();
     }
