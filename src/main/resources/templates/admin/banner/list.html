@@ -98,7 +98,7 @@
                    th:href="${'update.do?id=' + x.getId()}">
             </td>
             <td>
-                <img th:src="${x.getImagePath()}" th:alt="${x.getAlterText()}" th:target="${x.getTarget()}" />
+                <img width="100" height="100" th:src="${x.getImagePath()}" th:alt="${x.getAlterText()}" th:target="${x.getTarget()}" />
             </td>
             <td>
                 <p th:text="${#temporals.format(x.getRegDt(), 'yyyy-MM-dd HH:mm')}"></p>
